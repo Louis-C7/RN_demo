@@ -10,8 +10,10 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
+    // this.count = 0
     this.state = {
       list: new DataProvider((r1, r2) => r1 !== r2).cloneWithRows(this._generateData(20)),
+      count: 0
     };
 
     this.layoutProvider = new LayoutProvider((i) => {
@@ -58,7 +60,7 @@ export default class App extends Component {
     return (
       <View style={styles.listItem}>
         {/* <Image style={styles.image} source={{ uri: image }} /> */}
-        <Text style={styles.image}></Text>
+        <Text style={styles.image}>TEST</Text>
         <View style={styles.body}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.description}>{description}</Text>
@@ -70,19 +72,27 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.name}>{this.state.count}</Text>
         <RecyclerListView
           style={{flex: 1}}
           rowRenderer={this.rowRenderer}
           dataProvider={this.state.list}
           layoutProvider={this.layoutProvider}
-          onEndReached={this.fethMoreData}
-          onEndReachedThreshold={0.5}
-          isHorizontal={true}
-        //   renderFooter={() => {
-        //     <View style={styles.body}>
-        //         <Text style={styles.loadingItem}>Loading</Text>
-        //     </View>
-        //   }}
+          // isHorizontal={true}
+          initialOffset={100}
+          // renderAheadOffset={10000}
+          // onScroll={() => {this.setState({count: this.state.count+1})}}
+          onEndReached={() => {this.setState({count: this.state.count+1})}}
+          // onEndReached={this.fethMoreData}
+          // onEndReachedThreshold={0}
+          // onEndReachedThresholdRelative={20}
+          initialRenderIndex={10}
+          // forceNonDeterministicRendering={true}
+          renderFooter={() => {
+            <View style={styles.listItem}>
+                <Text style={styles.loadingItem}>Loading</Text>
+            </View>
+          }}
         />
        </View>
     );
